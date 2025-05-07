@@ -7,7 +7,7 @@ train_tag = 'demo_emojis'
 
 
 # datasets paths
-cache_root = ['data folder a', 'data folder b', '...']
+cache_root = ['../data/dataset/demo_text_vm_ds']
 
 # dataset configurations
 patch_size = 128

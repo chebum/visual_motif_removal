@@ -12,7 +12,7 @@ SPACE_REPLACEMENT_STRING = '<sp>'
 if os_name == 'nt':
     FONT = 'arial.ttf'
 else:
-    FONT = "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf"
+    FONT = "/Users/ivannikitin/watermark-removal/visual_motif_removal/arial.ttf"
 
 
 
@@ -36,7 +36,7 @@ def crop_image(image, size, rand=False):
         else:
             h_0 = (h - w) // 2
         h_1 = h_0 + w
-    return image.crop((w_0, h_0, w_1, h_1)).resize((size, size), Image.ANTIALIAS)
+    return image.crop((w_0, h_0, w_1, h_1)).resize((size, size), Image.Resampling.BILINEAR)
 
 
 def blur_image(sy, mask):
@@ -147,11 +147,15 @@ def get_text_motif(text, color=(255, 255, 255, 255), font=FONT, border=0):
     font = ImageFont.truetype(font, 50)
     text = text.replace(SPACE_REPLACEMENT_STRING, ' ')
     lines = text.split(NEWLINE_REPLACEMENT_STRING)
-    img_width, line_height = font.getsize(lines[0])
+    bbox = font.getbbox(lines[0])
+    img_width = round(bbox[2] - bbox[0])
+    line_height = round(bbox[3] - bbox[1])
     line_space = round(line_height * 0.2)
     y = []
     for line in lines:
-        line_width, line_height, = font.getsize(line)
+        bbox = font.getbbox(line)
+        line_width = round(bbox[2] - bbox[0])
+        line_height = round(bbox[3] - bbox[1])
         if line_width > img_width:
             img_width = line_width
         y.append(line_height + line_space)
